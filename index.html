@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        };
+        #output{
+            text-align: center;
+        }
+
+        button {
+            display: inline-block;
+            height: 80px;
+            width: 80px;
+        };
+        body{
+            text-align: center;
+        }
+    </style>
+    <title>小人老虎枪</title>
+</head>
+<body>
+    <div id="output" style="height: 400px; width: 600px; background: #eee"></div>
+    <button id="man">小人</button>
+    <button id="tiger">老虎</button>
+    <button id="gun">枪</button>
+
+    <script>
+        const $button = {
+            man :document.getElementById('man'),
+            tiger:document.getElementById('tiger'),
+            gun:document.getElementById('gun')
+        }
+
+        const $output = document.getElementById('output')
+        
+        Object.keys($button).forEach(key => {
+        $button[key].addEventListener('click', function () {
+            fetch(`http://${location.host}/game?action=${key}`)
+                .then((res) => {
+                    return res.text()
+                })
+                .then((text) => {
+                    $output.innerHTML += text + '<br/>';
+                })
+        })
+    })
+    </script>
+</body>
+</html>
