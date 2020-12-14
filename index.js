@@ -2,19 +2,19 @@ const http = require('http');
 const querystring = require('querystring');
 const url = require('url');
 const fs = require('fs');
-
+//导入游戏
 const game = require('./game')
 
 let playerWon = 0;
 let playerLastAction = null;
 let sameCount = 0;
-
+let playerLose = 0;
 http.createServer(
     function(req,res){
         //通过内置模块url，解析发送自url的包
         //将其分割成 协议(protocol)://域名(host):端口(port)/路径名(pathname)?请求参数(query)
         const parsedUrl = url.parse(req.url);
-
+        //访问不存在
         if(parsedUrl.pathname == '/favicon.ico'){
             res.writeHead(200);
             res.end();
@@ -25,7 +25,7 @@ http.createServer(
             // 就要把action解析出来，然后执行游戏逻辑
             const query = querystring.parse(parsedUrl.query);
             const playerAction = query.action;
-
+            
             // 如果统计的玩家胜利次数超过3
             // 或者玩家出现过作弊的情况（sameCount=9代表玩家有过作弊行为）
             if (playerWon >= 3 || sameCount == 9) {
@@ -33,7 +33,11 @@ http.createServer(
                 res.end('我再也不和你玩了！');
                 return
             }
-
+            if(playerLose>=3){
+                res.writeHead(500);
+                res.end('你太菜了，我不屑与你玩！');
+                return
+            }
             // 当玩家操作与上次相同，则连续相同操作统计次数+1，否则统计清零
             // 当玩家操作连续三次相同，则视为玩家作弊，把sameCount置为9代表有过作弊行为
             if (playerLastAction && playerAction == playerLastAction) {
@@ -68,8 +72,9 @@ http.createServer(
 
             } else {
                 res.end('你输了！');
-
-            }
+                // 玩家输的次数+1
+                playerLose++;
+                }
         }
 
         // 如果访问的是根路径，则把游戏页面读出来返回出去
