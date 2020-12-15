@@ -19,6 +19,8 @@
 git clone https://github.com/YLX621/Little-tiger-gun
 #进入文件夹
 cd Little-tiger-gun
+#下载安装依赖
+npm install
 #开启本地服务
 node index.js
 #开始玩游戏吧！
