@@ -9,6 +9,7 @@ let playerWon = 0;
 let playerLastAction = null;
 let sameCount = 0;
 let playerLose = 0;
+
 http.createServer(
     function(req,res){
         //通过内置模块url，解析发送自url的包
@@ -42,7 +43,6 @@ http.createServer(
             // 当玩家操作连续三次相同，则视为玩家作弊，把sameCount置为9代表有过作弊行为
             if (playerLastAction && playerAction == playerLastAction) {
                 sameCount++;
-
             } else {
                 sameCount = 0;
             }
@@ -81,7 +81,5 @@ http.createServer(
         if (parsedUrl.pathname == '/') {
             fs.createReadStream(__dirname + '/index.html').pipe(res);
         }
-
-
         })
         .listen(3000)
